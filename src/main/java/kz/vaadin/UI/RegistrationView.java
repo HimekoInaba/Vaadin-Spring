@@ -1,10 +1,16 @@
 package kz.vaadin.UI;
 
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationResult;
+import com.vaadin.data.Validator;
+import com.vaadin.data.ValueContext;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import kz.vaadin.Model.User;
+import kz.vaadin.Service.SecurityService;
 import kz.vaadin.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,18 +23,43 @@ public class RegistrationView extends VerticalLayout implements View {
     @Autowired
     UserService userService;
 
+    @Autowired
+    SecurityService securityService;
+
     User user;
 
     public RegistrationView() {
 
         Label label = new Label("Enter your information below to register:");
         TextField username = new TextField("Username");
-        PasswordField password = new PasswordField("Passoword");
+        PasswordField password = new PasswordField("Password");
         PasswordField confirmPassword = new PasswordField("Confirm password");
         TextField email = new TextField("E-mail");
         Button register = new Button("Register");
 
         addComponents(label, username, password, confirmPassword, email, register);
+
+        new Binder<User>().forField(username)
+                .withNullRepresentation("")
+                .withValidator(s -> s.length() > 8, "Username length must be between at least 8 characters!")
+                .withValidator(s -> s.length() < 32,"Username length must not exceed 32 characters!")
+                .bind(User::getUsername, User::setUsername);
+
+        new Binder<User>().forField(password)
+                .withNullRepresentation("")
+                .withValidator(s -> s.length() > 8, "Password length must be between at least 8 characters!")
+                .withValidator(s -> s.length() < 32,"Password length must not exceed 32 characters!")
+                .bind(User::getPassword, User::setPassword);
+
+        new Binder<User>().forField(confirmPassword)
+                .withNullRepresentation("")
+                .withValidator(s -> s.length() > 8, "Confirmation password length must be between at least 8 characters!")
+                .withValidator(s -> s.length() < 32,"Confirmation password length must not exceed 32 characters!")
+                .bind(User::getConfirmPassword, User::setConfirmPassword);
+
+        new Binder<User>().forField(email)
+                .withNullRepresentation("")
+                .bind(User::getEmail, User::setEmail);
 
         setComponentAlignment(label, Alignment.MIDDLE_CENTER);
         setComponentAlignment(username, Alignment.MIDDLE_CENTER);
@@ -41,6 +72,7 @@ public class RegistrationView extends VerticalLayout implements View {
             if (verifyPassword(password.getValue(), confirmPassword.getValue())) {
                 userService.add(new User(username.getValue(), password.getValue(), confirmPassword.getValue(), email.getValue()));
                 user = userService.findByUsername(username.getValue());
+                securityService.autologin(user.getUsername(), password.getValue());
                 getUI().getNavigator().navigateTo(MyVaadinUI.USERPROFILEVIEW + "/" + user.getId());
             } else {
                 Notification.show("Passwords don't match!");

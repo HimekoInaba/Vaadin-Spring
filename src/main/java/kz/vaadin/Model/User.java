@@ -1,18 +1,25 @@
 package kz.vaadin.Model;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "Users")
 public class User {
 
     @Id
-    @SequenceGenerator(name="hibernate_sequence",sequenceName="MY_SEQ_GEN", initialValue=205, allocationSize=12)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="hibernate_sequence")
+    //@SequenceGenerator(name="hibernate_sequence",sequenceName="MY_SEQ_GEN", initialValue=205, allocationSize=12)
+    //@GeneratedValue(strategy= GenerationType.SEQUENCE, generator="hibernate_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "email")
     private String email;
 
     @Transient
@@ -21,12 +28,10 @@ public class User {
     public User() {
     }
 
-    public boolean authenticate(String username, String password) {
-        if (username.equals(getUsername()) && password.equals(getPassword())) {
-            return true;
-        }
-        return false;
-    }
+    @ManyToMany
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Roles> roles;
 
     public User(String username, String password, String confirmPassword, String email) {
         this.username = username;
@@ -73,6 +78,14 @@ public class User {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public Set<Roles> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Roles> roles) {
+        this.roles = roles;
     }
 
     @Override

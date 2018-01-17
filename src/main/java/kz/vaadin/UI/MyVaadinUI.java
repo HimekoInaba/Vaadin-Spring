@@ -53,6 +53,7 @@ public class MyVaadinUI extends UI {
     public final static String USERPROFILEVIEW =  UserProfileView.VIEW_NAME;
     public final static String MAINVIEW =  LoginView.VIEW_NAME;
     public final static String USERLISTVIEW = UserListView.VIEW_NAME;
+    public final static String ADMINVIEW = AdminView.VIEW_NAME;
 
     @Override
     protected void init(VaadinRequest request) {

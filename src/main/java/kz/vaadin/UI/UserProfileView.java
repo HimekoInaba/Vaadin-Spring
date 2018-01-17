@@ -31,21 +31,26 @@ public class UserProfileView extends VerticalLayout implements View {
 
         Button logout = new Button("Logout");
         Button userList = new Button("List of all users");
-        Label greetingField = new Label("Welcome to your profile, " + user.getUsername());
-        Label currentSessionUsername = new Label(user.getUsername());
+        Button adminPanel = new Button("Admin panel");
+        Label greetingField = new Label("Welcome to your profile!");
+        Label userInformation = new Label("User information:");
+        Label currentSessionUsername = new Label("Username " + user.getUsername());
         Label email = new Label("Email: " + user.getEmail());
 
-        addComponents(greetingField, email, currentSessionUsername, logout, userList);
+        addComponents(greetingField, logout, userInformation, currentSessionUsername, email, userList, adminPanel);
 
         setComponentAlignment(greetingField, Alignment.TOP_LEFT);
+        setComponentAlignment(userInformation, Alignment.TOP_LEFT);
         setComponentAlignment(email, Alignment.TOP_LEFT);
-        setComponentAlignment(currentSessionUsername, Alignment.TOP_RIGHT);
+        setComponentAlignment(currentSessionUsername, Alignment.TOP_LEFT);
         setComponentAlignment(logout, Alignment.TOP_RIGHT);
         setComponentAlignment(userList, Alignment.BOTTOM_CENTER);
+        setComponentAlignment(adminPanel, Alignment.BOTTOM_CENTER);
 
         greetingField.addStyleName(ValoTheme.LABEL_H1);
+        userInformation.addStyleName(ValoTheme.LABEL_H2);
         email.addStyleName(ValoTheme.LABEL_H2);
-        currentSessionUsername.addStyleName(ValoTheme.LABEL_H3);
+        currentSessionUsername.addStyleName(ValoTheme.LABEL_H2);
 
         logout.addClickListener(click ->{
             getUI().getNavigator().navigateTo(MyVaadinUI.MAINVIEW);
@@ -53,6 +58,7 @@ public class UserProfileView extends VerticalLayout implements View {
             vSession.close();
         });
 
+        adminPanel.addClickListener(click -> getUI().getNavigator().navigateTo(MyVaadinUI.ADMINVIEW));
         userList.addClickListener(click -> getUI().getNavigator().navigateTo(MyVaadinUI.USERLISTVIEW));
     }
 

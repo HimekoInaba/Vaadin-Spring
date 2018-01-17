@@ -6,6 +6,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import kz.vaadin.Model.User;
+import kz.vaadin.Service.SecurityService;
 import kz.vaadin.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,6 +16,9 @@ public class LoginView extends VerticalLayout implements View {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    SecurityService securityService;
 
     public static final String VIEW_NAME = "/";
 
@@ -39,7 +43,7 @@ public class LoginView extends VerticalLayout implements View {
 
         login.addClickListener(click -> {
             user = userService.findByUsername(username.getValue());
-            if(user.authenticate(username.getValue(), password.getValue())) {
+            if(securityService.authenticate(username.getValue(), password.getValue(), user)) {
                 getUI().getNavigator().navigateTo(MyVaadinUI.USERPROFILEVIEW + "/" + user.getId());
             }
             else {
