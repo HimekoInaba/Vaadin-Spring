@@ -61,6 +61,9 @@
           <element id="library" level="project" name="Maven: aopalliance:aopalliance:1.0" />
           <element id="library" level="project" name="Maven: org.springframework.security:spring-security-web:5.0.0.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.security:spring-security-config:5.0.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.vaadin.spring.extensions:vaadin-spring-ext-security:2.0.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.vaadin.spring.extensions:vaadin-spring-ext-core:2.0.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.vaadin.spring.addons:vaadin-spring-addon-eventbus:2.0.0.RELEASE" />
         </element>
       </element>
       <element id="directory" name="META-INF">
